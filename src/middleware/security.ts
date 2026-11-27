@@ -4,12 +4,12 @@ import rateLimit from 'express-rate-limit';
 import { config } from '../config/env';
 
 export const helmetMiddleware = helmet({
-    contentSecurityPolicy: config.isProd ? undefined : false,
+    contentSecurityPolicy: process.env.NODE_ENV === 'production' ? undefined : false,
     crossOriginEmbedderPolicy: false,
 });
 
 export const corsMiddleware = cors({
-    origin: config.frontendUrl,
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],

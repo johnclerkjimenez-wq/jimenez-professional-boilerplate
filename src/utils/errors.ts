@@ -19,11 +19,11 @@ export class AppError extends Error {
     }
 }
 
-export class NotFoundError extends AppError {
+export class BadRequestError extends AppError {
     constructor(resource: string, id?: string | number) {
         const message = id 
-            ? `${resource} with ID idnotfound`:`{resource} not found`;
-        super(message, 404, 'NOT_FOUND');
+            ? `${resource} with ID ${id} not found` : `${resource} not found`;
+        super(message, 400, 'BAD_REQUEST');
     }
 }
 

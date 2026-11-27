@@ -1,20 +1,18 @@
 import { DataSource } from 'typeorm';
 import { config } from './env';
-import { User } from '../entities/User';
-import path from 'path';
+
 
 export const AppDataSource = new DataSource({
     type: 'mysql',
-    host: config.db.host,
-    port: config.db.port,
-    username: config.db.username,
-    password: config.db.password,
-    database: config.db.database,
-    entities: [User],
+    host: config.database.host,
+    
+    port: config.database.port,
+    username: config.database.username,     
+    password: config.database.password,
+    database: config.database.database,
+    entities: ['src/entities/**/*.ts'],
+    migrations: ['src/migrations/**/*.ts'],
     synchronize: false,
-    migrations: [path.join(__dirname, '../migrations/*.{ts,js}')],
-    logging: config.isDev ? ['error', 'warn'] : ['error'],
-    extra: {
-        connectionLimit: 10,
-    },
+    logging: true,
 });
+

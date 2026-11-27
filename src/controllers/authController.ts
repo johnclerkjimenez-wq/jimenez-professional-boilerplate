@@ -1,4 +1,3 @@
-
 import { Request, Response } from 'express';
 import { AuthService } from '../services/authService';
 import { UnauthorizedError } from '../utils/errors';
@@ -10,6 +9,25 @@ const logger = createLogger('AuthController');
 export class AuthController {
 
     /**
+     * POST /api/auth/register
+     */
+    static async register(req: Request, res: Response) {
+        const { name, email, password } = req.body;
+
+        const authResponse = await AuthService.register({
+            name,
+            email,
+            password,
+        });
+
+        logger.info('Registration successful', {
+            userId: authResponse.user.id,
+        });
+
+        sendSuccess(res, authResponse, 'Registration successful', 201);
+    }
+
+    /**
      * POST /api/auth/login
      */
     static async login(req: Request, res: Response) {
@@ -17,11 +35,11 @@ export class AuthController {
 
         const authResponse = await AuthService.login({
             email,
-            password
+            password,
         });
 
         logger.info('Login successful', {
-            userId: authResponse.user.id
+            userId: authResponse.user.id,
         });
 
         sendSuccess(res, authResponse, 'Login successful');

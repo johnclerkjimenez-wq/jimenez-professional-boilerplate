@@ -1,6 +1,6 @@
 import { AppDataSource } from '../config/data-source';
 import { User } from '../entities/User';
-import { NotFoundError, ConflictError } from '../utils/errors';
+import { BadRequestError, ConflictError } from '../utils/errors';
 import bcrypt from 'bcrypt';
 import { createLogger } from '../utils/logger';
 
@@ -50,7 +50,7 @@ export class UserService {
     });
 
     if (!user) {
-        throw new NotFoundError('User', id);
+        throw new BadRequestError('User', id);
     }
 
     return user;
@@ -87,7 +87,7 @@ export class UserService {
         const user = await userRepository.findOne({ where: { id } });
         
         if (!user) {
-            throw new NotFoundError('User', id);
+            throw new BadRequestError('User', id);
         }
         
         if (data.email && data.email !== user.email) {
@@ -109,7 +109,7 @@ export class UserService {
         const user = await userRepository.findOne({ where: { id } });
         
         if (!user) {
-            throw new NotFoundError('User', id);
+            throw new BadRequestError('User', id);
         }
         
         await userRepository.remove(user);

@@ -39,3 +39,49 @@ The auth middleware checks the Authorization header and looks for a Bearer Token
 ### 10. If you had to implement role-based authorization (e.g., admin vs. regular user), how would you modify your current setup?
 
 I would add a role property to my User entity, such as admin or user. Then I would create another middleware that checks the user's role after authentication. For example, an admin can create, update, and delete users, while a regular user can only access allowed routes. This would make my application more secure because not every authenticated user would have the same permissions.
+
+Activity10-Reflection Questions and Answers
+
+1. Why is email verification important for security? What problems does it prevent?
+
+Email verification helps make sure that users actually have access to the email address they register with. It prevents fake or incorrect email registrations and helps protect accounts from unauthorized registration using someone else's email.
+
+2. Explain the "always return success" pattern in forgot password. Why is it a security best practice?
+
+The system returns a general success message whether the email exists or not. This prevents attackers from checking which email addresses are registered in the application. It helps protect users' privacy.
+
+3. What's the difference between a verification token and a reset token? Why do they have different expiration times?
+
+A verification token is used to confirm a user's email address, while a reset token is used to allow a user to change their forgotten password.
+
+They have different expiration times because they serve different purposes. Reset tokens should have a short validity period to reduce the risk of unauthorized password changes.
+
+4. Why do we use crypto.randomBytes(32) instead of Math.random() or Date.now() for token generation?
+
+We use crypto.randomBytes(32) because it generates cryptographically secure random values. Unlike Math.random() or Date.now(), its output is much harder to predict, making it safer for authentication tokens.
+
+5. What happens if a user never verifies their email? How does your system handle this?
+
+If a user never verifies their email, their account remains unverified. The system can prevent unverified users from accessing features that require a verified account. They can request another verification email if needed.
+
+6. Explain why tokens are cleared after use. What security risk does this prevent?
+
+Tokens are cleared after successful use so they cannot be reused. This helps prevent replay attacks and unauthorized access using old verification or reset links.
+
+7. What is email enumeration and how does your implementation prevent it?
+
+Email enumeration happens when someone tries to discover which email addresses are registered in an application. Our forgot password feature helps prevent this by returning the same general response whether the email exists or not.
+
+8. If you had to implement two-factor authentication (2FA) on top of this system, how would you approach it?
+
+I would add another verification step after the user enters their correct login credentials. The system could send a one-time code to their verified email or use an authenticator application. The user would need to enter the correct code before accessing their account.
+
+9. What are the trade-offs between using Ethereal (test service) vs. SendGrid (production service)?
+
+Ethereal is useful during development because it allows developers to test emails without sending real messages. However, it is not intended for actual users.
+
+SendGrid is designed for production and can send real emails to customers. It offers more features for managing email delivery, but it requires proper configuration and may involve costs.
+
+10. How would you handle a situation where a user's email provider marks your emails as spam?
+
+I would check the email configuration and make sure the sender is properly authenticated using SPF, DKIM, and DMARC. I would also use a trusted email provider, avoid suspicious email content, and make sure users can request another verification email.

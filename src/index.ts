@@ -17,11 +17,14 @@ import {
     notFoundHandler
 } from './middleware/errorHandler';
 
+
 import { userRoutes } from './routes/userRoutes';
 import { healthRoutes } from './routes/healthRoutes';
 import { authRoutes } from './routes/authRoutes';
+import { verificationRoutes } from './routes/verificationRoutes';
 
 const app = express();
+const port = Number(process.env.PORT) || 3000;
 
 app.set('trust proxy', 1);
 
@@ -36,6 +39,16 @@ app.use('/health', healthRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 
+
+
+// TEMPORARY DIRECT TEST
+app.get('/api/auth/test-direct', (req, res) => {
+    res.json({
+        success: true,
+        message: 'Express direct route working!'
+    });
+});
+
 app.use(notFoundHandler);
 app.use(errorHandler);
 
@@ -47,16 +60,16 @@ const startServer = async () => {
             service: 'api'
         });
 
-        app.listen(config.port, () => {
-            logger.info(`🚀 Server running on port ${config.port}`, {
+        app.listen(port, () => {            logger.info(`🚀 Server running on port ${port}`, {
+                service: 'api'
+
+            });
+
+            logger.info(`Environment: ${process.env.NODE_ENV || 'development'}`, {
                 service: 'api'
             });
 
-            logger.info(`Environment: ${config.env}`, {
-                service: 'api'
-            });
-
-            logger.info(`Healthcheck: http://localhost:${config.port}/health`, {
+            logger.info(`Healthcheck: http://localhost:${port}/health`, {
                 service: 'api'
             });
         });

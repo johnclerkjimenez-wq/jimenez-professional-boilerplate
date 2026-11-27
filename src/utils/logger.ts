@@ -19,7 +19,7 @@ const consoleFormat = winston.format.combine(
 );
 
 export const logger = winston.createLogger({
-    level: config.isProd ? 'info' : 'debug',
+    level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
     format: logFormat,
     defaultMeta: { service: 'api' },
     transports: [
@@ -38,7 +38,7 @@ export const logger = winston.createLogger({
     exitOnError: false,
 });
 
-if (config.isDev) {
+if (process.env.NODE_ENV !== 'production') {
     logger.add(new winston.transports.Console({
         format: consoleFormat,
     }));
